@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>    
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/auth.css') }}">
+</head>
+<body>
+     <div class="header-container">
+        <div class="heading">
+            <a href="{{ url_for('home') }}">
+                Vehicle Parking Application - V1<br>
+                22f2001731
+            </a>
+        </div>
+    </div>
+     <div class="main-container">
+            <div class="title">
+                Register
+            </div>
+            <form method="POST">
+                <div class="field">
+                    <input type="text" name="fname" required>
+                    <label for="fname"><span>* </span>First Name</label>
+                </div>
+                <div class="field">
+                    <input type="text" name="lname" required>
+                    <label for="lname"><span>* </span>Last Name</label>
+                </div>
+                <div class="field">
+                    <input type="text" name="email" required>
+                    <label for="email"><span>* </span>Email</label>
+                </div>
+                <div class="field">
+                    <input type="password" name="password" required>
+                    <label for="password"><span>* </span>Password</label>
+                </div>
+                <br>
+                <div class="field">
+                    <input type="submit" value="Register">
+                </div>
+                <div class="bottom">
+                    <a href="{{ url_for('home') }}">Go Home</a>
+                    <a href="{{ url_for('login') }}">Login</a>
+                </div>
+                <div class="text">
+                    {% if new_user is defined %}
+                        {% if new_user %}
+                            <p style="color: green;">
+                                Registration successful! User ID: <strong>{{ user_id }}</strong>
+                            </p>
+                        {% else %}
+                            <p style="color: red;">
+                                Email already exists.
+                            </p>
+                        {% endif %}
+                    {% endif %}
+                </div>
+        </form>
+    </div>
+</body>
+</html>

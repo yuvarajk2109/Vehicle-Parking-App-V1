@@ -1,7 +1,7 @@
 from . import db
 from datetime import datetime
-from parking_app_22f2001731.models.user import User
-from parking_app_22f2001731.models.parking_spot import ParkingSpot
+from models.user import User
+from models.parking_spot import ParkingSpot
 
 class Reservation(db.Model):
     __tablename__ = 'reservations'

@@ -1,5 +1,5 @@
 from . import db
-from parking_app_22f2001731.models.parking_lot import ParkingLot
+from models.parking_lot import ParkingLot
 
 class ParkingSpot(db.Model):
     __tablename__ = 'parking_spot'
@@ -9,5 +9,5 @@ class ParkingSpot(db.Model):
 
     lot_id = db.Column(db.Integer, db.ForeignKey('parking_lot.lot_id'), nullable=False)
     
-    reservations = db.relationships('Reservation', backref='spot', lazy=True)
+    reservations = db.relationship('Reservation', backref='spot', lazy=True)
     

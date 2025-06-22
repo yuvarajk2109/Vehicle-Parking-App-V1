@@ -7,7 +7,7 @@ class User(db.Model):
     email = db.Column(db.String(128), unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=False)
     fname = db.Column(db.String(128), nullable=False)
-    lname = db.Column(db.String(128))
-    role = db.Column(db.String(5))
+    lname = db.Column(db.String(128), nullable=False)
+    role = db.Column(db.String(5), nullable=False)
 
     reservations = db.relationship('Reservation', backref='user', lazy=True)

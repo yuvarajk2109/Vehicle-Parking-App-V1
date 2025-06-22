@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/home.css') }}">
+</head>
+<body>
+    <div class="header-container">
+        <div class="heading">
+            <a href="{{ url_for('home') }}">
+                Vehicle Parking Application - V1<br>
+                22f2001731
+            </a>
+        </div>
+        <div class="links">
+            <a href="{{ url_for('register') }}">Register</a>
+            &nbsp;
+            <a href="{{ url_for('login') }}">Login</a>
+        </div>
+    </div>
+    <div class="logout-message">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <p class="flash {{ category }}">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+</body>
+</html>

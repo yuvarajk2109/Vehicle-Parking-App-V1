@@ -1,0 +1,14 @@
+.logout-message {
+    text-align: right;
+}
+
+.flash.info {
+    color: #31708f;
+    background-color: #d9edf7;
+    display: block;             
+    font-weight: bold;
+    padding: 12px 20px;
+    margin: 0 0 10px 0;
+    width: 100%;                
+    box-sizing: border-box; 
+}
