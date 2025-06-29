@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>    
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/auth.css') }}">
+</head>
+<body>
+     <div class="header-container">
+        <div class="auth-heading">
+           <a href="{{ url_for('home') }}">
+                Vehicle Parking Application - V1<br>
+                22f2001731
+            </a>
+        </div>
+    </div>
+    
+     <div class="main-container">
+            <div class="title">
+                Login
+            </div>
+            <form method="POST">
+                <div class="field">
+                    <input type="number" name="user_id" required>
+                    <label for="user_id"><span>* </span>User ID</label>
+                </div>
+                <div class="field">
+                    <input type="password" name="password" required>
+                    <label for="password"><span>* </span>Password</label>
+                </div>
+                <br>
+                <div class="field">
+                    <input type="submit" value="Login">
+                </div>
+                <div class="bottom">
+                    <a href="{{ url_for('register') }}">Register</a>
+                    <a href="{{ url_for('forgot_password') }}">Forgot Password?</a>
+                </div>
+                <div class="text">
+                    {% if invalid is defined %}
+                        {% if invalid %}
+                            <p style="color: red;">
+                                Invalid credentials.
+                            </p>                            
+                        {% endif %}
+                    {% endif %}
+                </div>
+        </form>
+    </div>
+</body>
+</html>

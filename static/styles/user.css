@@ -1,0 +1,98 @@
+.heading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.links a.logout {
+    background-color: rgb(220, 98, 98);
+    border-right: none;
+}
+
+.links a.logout:hover {
+    background-color: rgb(239, 115, 115);
+}
+
+.menu-toggle {
+    margin-left: 20px;
+    margin-right: 20px;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.side-panel {
+    position: fixed;
+    top: 70;
+    left: -220px; 
+    width: 220px;
+    height: 100%;
+    transition: left 0.3s ease;
+    background-color: #4169E1; 
+    /* padding-top: 20px; */
+}
+
+.side-panel.show {
+    left: 0;
+}
+
+.side-panel a {
+    display: block;
+    padding: 15px 20px;
+    text-decoration: none;
+    font-weight: bold;
+    border-bottom: 3px solid black;
+}
+
+.side-panel a:hover {
+    background-color: #325cdb;
+    cursor: pointer;
+}
+
+.main-container {
+    margin-left: 0;
+    transition: margin-left 0.3s ease;
+    padding: 20px;  
+    width: 100%;
+    min-height: calc(100vh - 100px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+body.side-panel-open .main-container {
+    margin-left: 220px;
+}
+
+.lot-data {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.lot-data table, .lot-data th, .lot-data td {
+    text-align: left;
+    border-collapse: collapse;
+}
+
+.lot-data table {
+    border: 3px solid;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.lot-data th {
+    border-right: 3px solid;
+}
+
+.lot-data th, .lot-data td {    
+   padding: 10px;
+}
+
+.spot-data td {    
+    border-collapse: collapse;
+    border: 2px solid;
+    height: 100px;
+    width: 100px;
+}

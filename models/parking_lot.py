@@ -6,9 +6,10 @@ class ParkingLot(db.Model):
     lot_id = db.Column(db.Integer, primary_key=True)
     lot_name = db.Column(db.String(128), nullable=False)
     address = db.Column(db.String(128), nullable=False)
+    locality = db.Column(db.String(128), nullable=False)
     pincode = db.Column(db.String(6), nullable=False)
-    initial_price = db.Column(db.Float, nullable=False)
-    price_per_hour = db.Column(db.Float, nullable=False)
+    base_price = db.Column(db.Float, nullable=False)
+    additional_price = db.Column(db.Float, nullable=False)
     total_spots = db.Column(db.Integer, nullable=False)
     free_spots = db.Column(db.Integer, nullable=False)
 

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User</title>    
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/user.css') }}">
+    <script src="{{ url_for('static', filename='js/side_panel.js') }}"></script>
+</head>
+<body>
+    <div class="header-container">        
+        <div class="heading">
+            <span class="menu-toggle" onclick="toggleSidebar()">&#9776;</span>
+            <a href="{{ url_for('user_dashboard') }}">{{ user.fname }} {{ user.lname }}</a>         
+        </div>
+        <div class="heading" style="padding-top: 5px;">
+
+        </div>
+        <div class="links">
+            <a class="logout" href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </div>
+    <div id="side-panel" class="side-panel">
+        <a href="{{ url_for('user_dashboard') }}">View Parking Lots</a>
+        <a href="{{ url_for('user_dashboard') }}">Reserve Parking Spot</a>
+        <a href="{{ url_for('user_dashboard') }}">Release Parking Lot</a>
+        <a href="{{ url_for('user_dashboard') }}">View Reservation History</a>
+    </div>
+</body>
+</html>

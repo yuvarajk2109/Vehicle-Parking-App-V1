@@ -1,8 +1,4 @@
-from controllers.home import home_route
-from controllers.register import register_route
-from controllers.login import login_route
-from controllers.forgot_password import forgot_password_route
-from controllers.logout import logout_route
+from controllers.auth import home_route, register_route, login_route, forgot_password_route, logout_route
 from controllers.admin_dashboard import admin_dashboard_route
 from controllers.user_dashboard import user_dashboard_route
 

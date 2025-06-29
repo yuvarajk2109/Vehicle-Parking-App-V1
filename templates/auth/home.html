@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="header-container">
-        <div class="heading">
+        <div class="auth-heading">
             <a href="{{ url_for('home') }}">
                 Vehicle Parking Application - V1<br>
                 22f2001731
@@ -17,16 +17,14 @@
         </div>
         <div class="links">
             <a href="{{ url_for('register') }}">Register</a>
-            &nbsp;
             <a href="{{ url_for('login') }}">Login</a>
         </div>
     </div>
-    <div class="logout-message">
+    <div class="flash-message">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-                {% for category, message in messages %}
-                    <p class="flash {{ category }}">{{ message }}</p>
-                {% endfor %}
+                {% set category, message = messages[0] %}
+                <p class="flash {{ category }}">{{ message }}</p>
             {% endif %}
         {% endwith %}
     </div>

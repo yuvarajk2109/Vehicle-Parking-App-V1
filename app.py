@@ -1,5 +1,5 @@
 from flask import Flask
-from models import db, User
+from models import db, User, ParkingLot, ParkingSpot
 from controllers import register_all_routes
 from controllers.auth_utils import hash_password
 from sqlalchemy import inspect
@@ -17,7 +17,15 @@ with app.app_context():
         tables = inspector.get_table_names()
         print(f"Tables: {tables}")
 
+        # Placeholder to delete all records in tables
         # User.query.delete()
+        # ParkingLot.query.delete()
+        # ParkingSpot.query.delete()
+        # db.session.commit()
+
+        # Placeholder to delete a particular table
+        # ParkingSpot.__table__.drop(db.engine)
+        # ParkingLot.__table__.drop(db.engine)        
         # db.session.commit()
 
         existing_admin = User.query.filter_by(role='admin').first()

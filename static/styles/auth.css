@@ -6,6 +6,10 @@ body {
     background-size: cover;
 }
 
+.auth-heading {
+    margin-left: 20px;
+}
+
 .main-container {
     margin-top: 40px;
     width: 450px;
@@ -29,64 +33,6 @@ body {
     color: red;
 }
 
-.main-container form .field {
-    display: flex;
-    height: 50px;
-    width: 100%;
-    margin-top: 20px;
-    position: relative;
-}
-
-.main-container form .field input{
-    height: 100%;
-    width: 100%;
-    outline: none;
-    font-size: 17px;
-    padding-left: 20px;
-    border: 1px solid lightgrey;
-    border-radius: 25px;
-}
-
-.main-container form .field label{
-    position: absolute;
-    top: 50%;
-    left: 20px;
-    color: #999999;
-    font-weight: 400;
-    font-size: 17px;
-    pointer-events: none;
-    transform: translateY(-50%);
-    transition: all 0.3s ease;
-}
-
-form .field input:focus ~ label,
-form .field input:required:valid ~ label {
-    top: 0%;
-    font-size: 16px;
-    color: #4169E1;
-    background: #fff;
-    transform: translateY(-50%);
-}
-
-form .field input[type="submit"] {
-    color: #fff;
-    border: none;
-    padding-left: 0;
-    margin-top: -20px;
-    font-size: 20px;
-    font-weight: 500;
-    cursor: pointer;
-    background-color: #4169E1;
-}
-
-form .field input[type="submit"]:hover {
-    background: linear-gradient(45deg,#6585e8, #4169E1);
-}
-
-form .field input[type="submit"]:active {
-    transform: scale(0.95);
-}
-
 .main-container form .bottom {
     margin-top: 10px;
     display: flex;
@@ -100,4 +46,8 @@ form .field input[type="submit"]:active {
     margin-top: 10px;
     position: relative;
     text-align: center;
+}
+
+form .field input[type="submit"] {
+    margin-top: -20px;
 }

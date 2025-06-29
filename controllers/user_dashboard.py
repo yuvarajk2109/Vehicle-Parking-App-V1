@@ -12,4 +12,4 @@ def user_dashboard_route(app):
             'lname': session.get('lname'),
             'role': session.get('role')
         }
-        return render_template('user_dashboard.html', user=user)
+        return render_template('user/user_dashboard.html', user=user)
