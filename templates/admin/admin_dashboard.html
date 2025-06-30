@@ -208,6 +208,42 @@
                     </form>
                 {% endif %}
             {% elif data.section == 'users' %}
+                {% if not data.user_details %}
+                    <p>No users found.</p>
+                {% else %}
+                    <div class="user-data">
+                        <table>
+                            <tr class="header-row">
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Current Reservation(s)</th>
+                            </tr>
+                            {% for current_user in data.user_details %}
+                                {% set user = current_user.user %}
+                                {% set reservations = current_user.reservations %}
+                                <tr>
+                                    <td>{{ user.fname }} {{ user.lname }}</td>
+                                    <td>{{ user.email }}</td>
+                                    {% if reservations %}
+                                        {% set l = reservations|length %}
+                                        {% if l == 1 %}
+                                            <td>reservations[0]</td>
+                                        {% else %}
+                                            <td>
+                                            {% for i in range(l-1) %}
+                                                {{ reservations[i] }}<hr>
+                                            {% endfor %}
+                                            {{ reservations[l-1] }}
+                                            </td>
+                                        {% endif %}
+                                    {% else %} 
+                                        <td>None</td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                {% endif %}
             {% endif %}            
             {% if data.message %}
                 <p>{{ data.message }}</p>

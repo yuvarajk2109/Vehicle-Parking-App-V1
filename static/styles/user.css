@@ -96,3 +96,38 @@ body.side-panel-open .main-container {
     height: 100px;
     width: 100px;
 }
+
+.user-data table, .user-data th, .user-data td {
+    text-align: left;
+    border-collapse: collapse;
+}
+
+.user-data table {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.user-data .header-row {
+    /* border-top: 3px solid grey; */
+    background: #b7e0ed;
+    background: linear-gradient(90deg, rgba(183, 224, 237, 1) 0%, rgba(155, 204, 179, 1) 100%);
+}
+
+.user-data tr:nth-child(odd) {
+    background-color: rgb(203, 234, 243);
+    /* background-color: rgb(196, 194, 194); */
+}
+
+.user-data tr:nth-child(even) {
+    background-color: rgb(202, 237, 219);
+    /* background-color: rgb(196, 194, 194); */
+}
+
+.user-data th, .user-data td {    
+   padding: 15px;
+   /* border-bottom: 3px solid grey; */
+}
+
+.user-data hr {
+    border: 1px solid grey;
+}

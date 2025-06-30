@@ -1,5 +1,5 @@
 from flask import render_template, request, session, redirect, url_for, flash
-from models import db, ParkingLot, ParkingSpot
+from models import db, User, ParkingLot, ParkingSpot, Reservation
 
 def admin_dashboard_route(app):
     @app.route('/admin_dashboard', methods=['GET','POST'])
@@ -30,6 +30,37 @@ def admin_dashboard_route(app):
                 parking_lots = ParkingLot.query.filter(ParkingLot.total_spots==ParkingLot.free_spots).all()
                 data['parking_lots'] = parking_lots
                 return render_template('admin/admin_dashboard.html', data=data)
+            elif section == 'users':
+                users = User.query.filter(User.role=='user').all()
+                user_details = []
+                for user in users:
+                    reservation_tuple = (
+                        db.session.query(
+                            ParkingLot.lot_name,    # 0
+                            ParkingLot.locality,    # 1
+                            ParkingLot.pincode,     # 2
+                            ParkingSpot.spot_id     # 3
+                        )
+                        .join(ParkingSpot, ParkingLot.lot_id == ParkingSpot.lot_id)
+                        .join(Reservation, ParkingSpot.spot_id == Reservation.spot_id)
+                        .filter(
+                            Reservation.user_id == user.user_id,
+                            Reservation.end_time == None
+                        )
+                        .all()
+                    )
+                    reservations = []
+                    for lot_name, locality, pincode, spot_id  in reservation_tuple:
+                        reservations.append(
+                            f"Spot {spot_id}, {lot_name}, {locality}, Chennai - {pincode}"
+                        )
+                    user_details.append({
+                        'user': user,
+                        'reservations': reservations
+                    })
+                # print(user_details)
+                data['user_details'] = user_details
+                return render_template('admin/admin_dashboard.html', data=data)
 
         if request.method == "POST":
             if section == 'add':
@@ -56,8 +87,7 @@ def admin_dashboard_route(app):
                 db.session.flush()
 
                 status = 'A'
-                lot_id = parking_lot.lot_id
-                
+                lot_id = parking_lot.lot_id                
 
                 for i in range(total_spots):
                     parking_spot = ParkingSpot(
