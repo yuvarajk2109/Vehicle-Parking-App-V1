@@ -1,5 +1,5 @@
 from flask import Flask
-from models import db, User, ParkingLot, ParkingSpot
+from models import db, User
 from controllers import register_all_routes
 from controllers.auth_utils import hash_password
 from sqlalchemy import inspect

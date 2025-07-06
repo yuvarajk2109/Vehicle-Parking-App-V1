@@ -99,12 +99,16 @@ def user_dashboard_route(app):
                 )
                 reservations = []
                 for reservation in reservation_tuple:
+                    start_dt = datetime.combine(reservation[5], reservation[6])
+                    current_dt = datetime.now()
+                    duration = ceil((current_dt-start_dt).total_seconds()/3600)
                     reservations.append(
                         {
                             'lot_name': reservation[0],
                             'address': f"{reservation[1]}, {reservation[2]}, Chennai - {reservation[3]}",
                             'spot': reservation[4],
-                            'booked_date': f"{reservation[5].strftime("%d-%m-%Y")} {reservation[6]}"
+                            'booked_date': f"{reservation[5].strftime("%d-%m-%Y")} {reservation[6]}",
+                            'duration': f"{duration}" + (" hr" if duration==1 else " hrs")
                         }
                    )
                 data['reservations'] = reservations
@@ -130,12 +134,21 @@ def user_dashboard_route(app):
                 )
                 reservations = []
                 for reservation in reservation_tuple:
+                    duration = 0
+                    start_dt = datetime.combine(reservation.start_date, reservation.start_time)
+                    if (reservation.end_date != None):                        
+                        end_dt = datetime.combine(reservation.end_date, reservation.end_time)
+                        duration = ceil(((end_dt - start_dt).total_seconds())/3600)
+                    else:
+                        current_dt = datetime.now()
+                        duration = ceil(((current_dt - start_dt).total_seconds())/3600)
                     reservations.append(
                         {
                             'spot_no': reservation[0],
-                            'lot_name': f"{reservation[1]}, {reservation[2][0]}",
+                            'lot_name': f"{reservation[1]}, {reservation[2]}",
                             'booked_date': f"{reservation[3].strftime("%d-%m-%Y")} {reservation[4]}",
-                            'released_date': f"{reservation[5].strftime("%d-%m-%Y")} {reservation[6]}" if reservation[5]!=None else "Not released",
+                            'released_date': f"{reservation[5].strftime("%d-%m-%Y")} {reservation[6]}" if reservation[5]!=None else "<b>Not released</b>",
+                            'duration': f"{duration}" + (" hr" if duration==1 else " hrs"),
                             'total_cost': reservation[7] if reservation[7]!=None else "-"
                         }
                    )

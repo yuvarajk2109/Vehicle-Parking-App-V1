@@ -118,6 +118,7 @@
                             <th>Parking Lot</th>
                             <th>Address</th>
                             <th>Booked Date</th>
+                            <th>Duration</th>
                         </tr>
                         {% for reservation in data.reservations %}
                             <tr>
@@ -125,6 +126,7 @@
                                 <td>{{ reservation.lot_name }}</td>
                                 <td>{{ reservation.address }}</td>
                                 <td>{{ reservation.booked_date }}</td>
+                                <td>{{ reservation.duration }}</td>
                             </tr>
                         {% endfor %}
                     </table>
@@ -161,6 +163,7 @@
                             <th>Parking Lot</th>
                             <th>Booked Date</th>
                             <th>Released Date</th>
+                            <th>Duration</th>
                             <th>Total Cost</th>
                         </tr>
                         {% for reservation in data.reservations %}
@@ -168,7 +171,8 @@
                                 <td>{{ reservation.spot_no }}</td>
                                 <td>{{ reservation.lot_name }}</td>
                                 <td>{{ reservation.booked_date }}</td>
-                                <td>{{ reservation.released_date }}</td>
+                                <td>{{ reservation.released_date | safe }}</td>
+                                <td>{{ reservation.duration }}</td>
                                 <td>{{ reservation.total_cost }}</td>
                             </tr>
                         {% endfor %}

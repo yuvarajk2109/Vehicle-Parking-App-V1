@@ -222,6 +222,7 @@
                             <th>Name</th>
                             <th>Email</th>
                             <th>Current Reservation(s)</th>
+                            <th>Duration(s)</th>
                         </tr>
                         {% for current_user in data.user_details %}
                             {% set user = current_user.user %}
@@ -232,13 +233,20 @@
                                 {% if reservations %}
                                     {% set l = reservations|length %}
                                     {% if l == 1 %}
-                                        <td>{{ reservations[0] }}</td>
+                                        <td>{{ reservations[0].reservation_info }}</td>
+                                        <td>{{ reservations[0].duration }}</td>
                                     {% else %}
                                         <td>
                                         {% for i in range(l-1) %}
-                                            {{ reservations[i] }}<hr>
+                                            {{ reservations[i].reservation_info }}<hr>
                                         {% endfor %}
-                                        {{ reservations[l-1] }}
+                                        {{ reservations[l-1].reservation_info }}
+                                        </td>
+                                        <td>
+                                        {% for i in range(l-1) %}
+                                            {{ reservations[i].duration }}<hr>
+                                        {% endfor %}
+                                        {{ reservations[l-1].duration }}
                                         </td>
                                     {% endif %}
                                 {% else %} 
@@ -256,24 +264,24 @@
                 <div class="data-table">
                     <table class="data-table" style="margin-top: 50px;">
                         <tr class="header-row">
-                            <th>User ID</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Spot No.</th>
                             <th>Parking Lot</th>
                             <th>Booked Date</th>
                             <th>Released Date</th>
+                            <th>Duration</th>
                             <th>Total Cost</th>
                         </tr>
                         {% for reservation in data.reservations %}
                             <tr>
-                                <td>{{ reservation.user_id }}</td>
                                 <td>{{ reservation.name }}</td>
                                 <td>{{ reservation.email }}</td>
                                 <td>{{ reservation.spot_no }}</td>
                                 <td>{{ reservation.lot_name }}</td>
                                 <td>{{ reservation.booked_date }}</td>
-                                <td>{{ reservation.released_date }}</td>
+                                <td>{{ reservation.released_date | safe}}</td>
+                                <td>{{ reservation.duration }}</td>
                                 <td>{{ reservation.total_cost }}</td>
                             </tr>
                         {% endfor %}
