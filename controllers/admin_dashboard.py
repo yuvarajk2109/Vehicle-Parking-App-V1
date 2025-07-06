@@ -1,5 +1,7 @@
 from flask import render_template, request, session, redirect, url_for, flash
 from models import db, User, ParkingLot, ParkingSpot, Reservation
+from datetime import datetime
+from math import ceil
 
 def admin_dashboard_route(app):
     @app.route('/admin_dashboard', methods=['GET','POST'])
@@ -21,25 +23,26 @@ def admin_dashboard_route(app):
             'section': section
         } 
 
+        if section in {'view', 'update'}:
+            parking_lots = ParkingLot.query.all()
+            data['parking_lots'] = parking_lots
+
         if request.method == "GET":
-            if section in {'view', 'update'}:
-                parking_lots = ParkingLot.query.all()
-                data['parking_lots'] = parking_lots
-                return render_template('admin/admin_dashboard.html', data=data)
-            elif section == 'delete':
+            if section == 'delete':
                 parking_lots = ParkingLot.query.filter(ParkingLot.total_spots==ParkingLot.free_spots).all()
                 data['parking_lots'] = parking_lots
-                return render_template('admin/admin_dashboard.html', data=data)
             elif section == 'users':
                 users = User.query.filter(User.role=='user').all()
                 user_details = []
                 for user in users:
                     reservation_tuple = (
                         db.session.query(
-                            ParkingLot.lot_name,    # 0
-                            ParkingLot.locality,    # 1
-                            ParkingLot.pincode,     # 2
-                            ParkingSpot.spot_id     # 3
+                            ParkingLot.lot_name,    
+                            ParkingLot.locality,    
+                            ParkingLot.pincode,     
+                            ParkingSpot.spot_id,
+                            Reservation.start_date,
+                            Reservation.start_time     
                         )
                         .join(ParkingSpot, ParkingLot.lot_id == ParkingSpot.lot_id)
                         .join(Reservation, ParkingSpot.spot_id == Reservation.spot_id)
@@ -50,19 +53,70 @@ def admin_dashboard_route(app):
                         .all()
                     )
                     reservations = []
-                    for lot_name, locality, pincode, spot_id  in reservation_tuple:
+                    for reservation  in reservation_tuple:
+                        start_dt = datetime.combine(reservation[4], reservation[5])
+                        current_dt = datetime.now()
+                        duration = ceil((current_dt-start_dt).total_seconds()/3600)
                         reservations.append(
-                            f"Spot {spot_id}, {lot_name}, {locality}, Chennai - {pincode}"
+                            {
+                                'reservation_info': f"Spot {reservation[3]}, {reservation[0]}, {reservation[1]}, Chennai - {reservation[2]}",
+                                'duration': f"{duration}" + (" hr" if duration==1 else " hrs")
+                            }
                         )
                     user_details.append({
                         'user': user,
                         'reservations': reservations
                     })
+                    print(reservations)
                 # print(user_details)
                 data['user_details'] = user_details
-                return render_template('admin/admin_dashboard.html', data=data)
+            elif section == "all":
+                reservation_tuple = (
+                    db.session.query(
+                        User.user_id,
+                        User.fname,
+                        User.lname,
+                        User.email,
+                        ParkingSpot.spot_id,
+                        ParkingLot.lot_name,
+                        ParkingLot.locality,
+                        Reservation.start_date,
+                        Reservation.start_time,
+                        Reservation.end_date,
+                        Reservation.end_time,
+                        Reservation.total_cost
+                    )
+                    .join(ParkingSpot, ParkingLot.lot_id == ParkingSpot.lot_id)
+                    .join(Reservation, ParkingSpot.spot_id == Reservation.spot_id)
+                    .join(User, Reservation.user_id == User.user_id)
+                    .all()
+                )
+                reservations = []
+                for reservation in reservation_tuple:
+                    duration = 0
+                    start_dt = datetime.combine(reservation.start_date, reservation.start_time)
+                    if (reservation.end_date != None):                        
+                        end_dt = datetime.combine(reservation.end_date, reservation.end_time)
+                        duration = ceil(((end_dt - start_dt).total_seconds())/3600)
+                    else:
+                        current_dt = datetime.now()
+                        duration = ceil(((current_dt - start_dt).total_seconds())/3600)
+                    reservations.append(
+                        {
+                            'user_id': reservation[0],
+                            'name': f"{reservation[1]} {reservation[2][0]}",
+                            'email': reservation[3],
+                            'spot_no': reservation[4],
+                            'lot_name': f"{reservation[5]}, {reservation[6]}",
+                            'booked_date': f"{reservation[7].strftime("%d-%m-%Y")} {reservation[8]}",
+                            'released_date': f"{reservation[9].strftime("%d-%m-%Y")} {reservation[10]}" if reservation[9]!=None else "<b>Not released</b>",
+                            'duration': f"{duration}" + (" hr" if duration==1 else " hrs"),
+                            'total_cost': reservation[11] if reservation[11]!=None else "-"
+                        }
+                   )
+                data['reservations'] = reservations
 
-        if request.method == "POST":
+        elif request.method == "POST":
             if section == 'add':
                 lot_name = request.values.get('lot_name')
                 address = request.values.get('address')
@@ -105,18 +159,14 @@ def admin_dashboard_route(app):
                 return redirect(url_for('admin_dashboard', section=None))
 
             elif section == 'view':
-                parking_lots = ParkingLot.query.all()
-                data['parking_lots'] = parking_lots
                 lot_id = int(request.values.get('lot_id'))
-                parking_lot = ParkingLot.query.filter_by(lot_id=lot_id).first()
+                parking_lot = ParkingLot.query.filter_by(lot_id=lot_id).first() 
 
                 parking_spots = ParkingSpot.query.filter_by(lot_id=lot_id).all()
                 data['parking_lot'] = parking_lot
                 data['parking_spots'] = parking_spots
 
             elif section == 'update':
-                parking_lots = ParkingLot.query.all()
-                data['parking_lots'] = parking_lots
                 lot_id = int(request.values.get('lot_id'))
                 parking_lot = ParkingLot.query.filter_by(lot_id=lot_id).first()
                 lot_name = parking_lot.lot_name
@@ -185,8 +235,9 @@ def admin_dashboard_route(app):
                             for parking_spot in free_spots:
                                 db.session.delete(parking_spot)
                             
-                    new_value = new_total_spots                    
-                    db.session.commit()
+                    new_value = new_total_spots  
+
+                db.session.commit()
 
                 flash(f"Updated {param_dict[parameter]} of {lot_name} (Lot ID: {lot_id}) to {new_value}.", "success")
                 return redirect(url_for('admin_dashboard', section=None))
@@ -201,7 +252,7 @@ def admin_dashboard_route(app):
                 db.session.delete(parking_lot)
                 db.session.commit()
 
-                flash(f"Deleted {lot_name} (Lot ID: {lot_id})", "success")
+                flash(f"Deleted {lot_name} (Lot ID: {lot_id})", "info")
                 return redirect(url_for('admin_dashboard', section=None))
 
         return render_template('admin/admin_dashboard.html', data=data)
