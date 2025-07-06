@@ -7,25 +7,175 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/user.css') }}">
     <script src="{{ url_for('static', filename='js/side_panel.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/filter.js') }}"></script>
 </head>
 <body>
     <div class="header-container">        
         <div class="heading">
             <span class="menu-toggle" onclick="toggleSidebar()">&#9776;</span>
-            <a href="{{ url_for('user_dashboard') }}">{{ user.fname }} {{ user.lname }}</a>         
+            <a href="{{ url_for('user_dashboard') }}"> {{ data.user.fname }} {{ data.user.lname[0] }}</a>         
         </div>
         <div class="heading" style="padding-top: 5px;">
-
+            {% if data.section == 'view' %}
+                <span>Parking Lots</span>
+            {% elif data.section == 'reserve' %}
+                <span>Reserve Spot</span>
+            {% elif data.section == 'current' %}
+                <span>Currently Reserved Spots</span>
+            {% elif data.section == 'release' %}
+                <span>Release Spot</span>
+            {% elif data.section == 'history' %}
+                <span>Reservation History</span>
+            {% endif %}
         </div>
         <div class="links">
             <a class="logout" href="{{ url_for('logout') }}">Logout</a>
         </div>
     </div>
     <div id="side-panel" class="side-panel">
-        <a href="{{ url_for('user_dashboard') }}">View Parking Lots</a>
-        <a href="{{ url_for('user_dashboard') }}">Reserve Parking Spot</a>
-        <a href="{{ url_for('user_dashboard') }}">Release Parking Lot</a>
-        <a href="{{ url_for('user_dashboard') }}">View Reservation History</a>
+        <a href="{{ url_for('user_dashboard', section='view') }}">View Parking Lots</a>
+        <a href="{{ url_for('user_dashboard', section='reserve') }}">Reserve Spot</a>
+        <a href="{{ url_for('user_dashboard', section='current') }}">View Reserved Spots</a>
+        <a href="{{ url_for('user_dashboard', section='release') }}">Release Spot</a>
+        <a href="{{ url_for('user_dashboard', section='history') }}">Reservation History</a>
+    </div>
+    <div class="flash-message">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <p class="flash {{ category }}">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div> 
+    <div class="main-container">
+        {% if data.section == 'view' %}
+            {% if not data.localities and not data.filtered_lots %}
+                <p>No parking lots found.</p>
+            {% else %}
+                <form method="POST">
+                    <div class="field">
+                        <select name="locality" required>
+                            <option value="" disable select>Filter By Locality</option>
+                            {% for locality in data.localities %}
+                                <option value="{{ locality }}">{{ locality }}</option>
+                            {% endfor %}
+                        </select>                        
+                    </div>
+                    <div class="field">
+                        <input type="submit" value="View">
+                    </div>
+                </form>
+            {% endif %}
+            {% if data.filtered_lots %}
+                {% set lots = data.filtered_lots %}
+                <div class="data-table">
+                    <table>
+                        <tr class="header-row">
+                            <th>Name</th>
+                            <th>Address</th>
+                            <th>Base Price - First 2 Hours</th>
+                            <th>Additional Price - Every Hour After</th>
+                            <th>No. of Available Spots</th>
+                        </tr>
+                        {% for lot in lots %}
+                            <tr>
+                                <td>{{ lot.lot_name }}</td>
+                                <td>{{ lot.address }}, {{ lot.locality }}, Chennai - {{ lot.pincode }}</td>
+                                <td>₹{{ lot.base_price }}</td>
+                                <td>₹{{ lot.additional_price }}</td>
+                                <td>{{ lot.free_spots }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>               
+            {% endif %}
+        {% elif data.section == 'reserve' %}
+            {% if not data.localities and not data.parking_lots and data.filtered_lots %}
+                <p>No parking lots found.</p>
+            {% else %}
+                <form method="POST">
+                    <div class="field">
+                        <select id="locality" name="locality" onchange="onChangeLocality()" required>
+                            <option value="" disable select>Filter By Locality</option>
+                            {% for locality in data.localities %}
+                                <option value="{{ locality }}">{{ locality }}</option>
+                            {% endfor %}
+                        </select>                        
+                    </div>
+                    <div id="filter">                            
+                    </div>
+                </form>
+            {% endif %} 
+        {% elif data.section == 'current' %}
+            {% if not data.reservations %}
+                <p>No existing reservations.</p>
+            {% else %}
+                <div class="data-table">
+                    <table class="data-table">
+                        <tr class="header-row">
+                            <th>Spot No.</th>
+                            <th>Parking Lot</th>
+                            <th>Address</th>
+                            <th>Booked Date</th>
+                        </tr>
+                        {% for reservation in data.reservations %}
+                            <tr>
+                                <td>{{ reservation.spot }}</td>
+                                <td>{{ reservation.lot_name }}</td>
+                                <td>{{ reservation.address }}</td>
+                                <td>{{ reservation.booked_date }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            {% endif %}
+        {% elif data.section == 'release' %}
+            {% if not data.reservations %}
+                <p>No existing reservations.</p>
+            {% else %}
+                <form method="POST">
+                    <div class="field">
+                        <select name="spot_id">
+                            <option value="" disable select>Select Parking Spot to Release</option>
+                            {% for reservation in data.reservations %}
+                                <option value="{{reservation.spot_id}}">
+                                    Spot No. {{reservation.spot_id}} - {{reservation.lot_name}}, {{reservation.locality}}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="field">
+                        <input type="submit" value="Release">
+                    </div>
+                </form>
+            {% endif %}
+        {% elif data.section == 'history' %}
+            {% if not data.reservations %}
+                <p>No existing reservations.</p>
+            {% else %}
+                <div class="data-table">
+                    <table class="data-table" style="margin-top: 50px;">
+                        <tr class="header-row">
+                            <th>Spot No.</th>
+                            <th>Parking Lot</th>
+                            <th>Booked Date</th>
+                            <th>Released Date</th>
+                            <th>Total Cost</th>
+                        </tr>
+                        {% for reservation in data.reservations %}
+                            <tr>
+                                <td>{{ reservation.spot_no }}</td>
+                                <td>{{ reservation.lot_name }}</td>
+                                <td>{{ reservation.booked_date }}</td>
+                                <td>{{ reservation.released_date }}</td>
+                                <td>{{ reservation.total_cost }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            {% endif %}
+        {% endif %}
     </div>
 </body>
 </html>

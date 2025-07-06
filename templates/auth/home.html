@@ -23,10 +23,11 @@
     <div class="flash-message">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-                {% set category, message = messages[0] %}
-                <p class="flash {{ category }}">{{ message }}</p>
+                {% for category, message in messages %}
+                    <p class="flash {{ category }}">{{ message }}</p>
+                {% endfor %}
             {% endif %}
         {% endwith %}
-    </div>
+    </div>    
 </body>
 </html>

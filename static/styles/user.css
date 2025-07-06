@@ -22,12 +22,13 @@
 
 .side-panel {
     position: fixed;
-    top: 70;
+    top: 70px;
     left: -220px; 
     width: 220px;
     height: 100%;
     transition: left 0.3s ease;
     background-color: #4169E1; 
+    z-index: 1200;
     /* padding-top: 20px; */
 }
 
@@ -49,6 +50,7 @@
 }
 
 .main-container {
+    margin-top: 100px;
     margin-left: 0;
     transition: margin-left 0.3s ease;
     padding: 20px;  
@@ -64,70 +66,37 @@ body.side-panel-open .main-container {
     margin-left: 220px;
 }
 
-.lot-data {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
-
-.lot-data table, .lot-data th, .lot-data td {
+.data-table table, .data-table th, .data-table td {
     text-align: left;
     border-collapse: collapse;
 }
 
-.lot-data table {
-    border: 3px solid;
+.data-table table {
     margin-top: 20px;
     margin-bottom: 20px;
 }
 
-.lot-data th {
-    border-right: 3px solid;
-}
-
-.lot-data th, .lot-data td {    
-   padding: 10px;
-}
-
-.spot-data td {    
-    border-collapse: collapse;
-    border: 2px solid;
-    height: 100px;
-    width: 100px;
-}
-
-.user-data table, .user-data th, .user-data td {
-    text-align: left;
-    border-collapse: collapse;
-}
-
-.user-data table {
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-.user-data .header-row {
+.data-table .header-row {
     /* border-top: 3px solid grey; */
     background: #b7e0ed;
     background: linear-gradient(90deg, rgba(183, 224, 237, 1) 0%, rgba(155, 204, 179, 1) 100%);
 }
 
-.user-data tr:nth-child(odd) {
+.data-table tr:nth-child(odd) {
     background-color: rgb(203, 234, 243);
     /* background-color: rgb(196, 194, 194); */
 }
 
-.user-data tr:nth-child(even) {
+.data-table tr:nth-child(even) {
     background-color: rgb(202, 237, 219);
     /* background-color: rgb(196, 194, 194); */
 }
 
-.user-data th, .user-data td {    
+.data-table th, .data-table td {    
    padding: 15px;
    /* border-bottom: 3px solid grey; */
 }
 
-.user-data hr {
+.data-table hr {
     border: 1px solid grey;
 }

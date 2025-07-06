@@ -1,0 +1,29 @@
+[
+    {
+        "lot_id": 3,
+        "lot_name": "SK Parking",
+        "address": "127, Spider Road",
+        "locality": "Thirumullaivoyal",
+        "pincode": "600062",
+        "total_spots": 20,
+        "free_spots": 20
+    },
+    {
+        "lot_id": 4,
+        "lot_name": "Yuvaraj Parking",
+        "address": "103, Super Road",
+        "locality": "Ambattur",
+        "pincode": "600053",
+        "total_spots": 30,
+        "free_spots": 30
+    },
+    {
+        "lot_id": 5,
+        "lot_name": "Esa's Parking",
+        "address": "204, Wonder Road",
+        "locality": "Karayanchavadi",
+        "pincode": "600056",
+        "total_spots": 15,
+        "free_spots": 15
+    }
+]
