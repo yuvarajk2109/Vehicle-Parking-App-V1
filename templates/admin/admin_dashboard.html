@@ -6,8 +6,9 @@
     <title>Admin</title>    
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/user.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/user_admin.css') }}">
     <script src="{{ url_for('static', filename='js/side_panel.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/select.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/update.js') }}"></script>
 </head>
 <body>
      <div class="header-container">        
@@ -26,6 +27,8 @@
                 <span>Remove Parking Lot</span>
             {% elif data.section == 'users' %}
                 <span>View User Details</span>
+            {% elif data.section == 'all' %}
+                <span>Reservation History</span>
             {% endif %}
         </div>
         <div class="links">
@@ -38,216 +41,249 @@
         <a href="{{ url_for('admin_dashboard', section='update') }}">Update Parking Lot</a>
         <a href="{{ url_for('admin_dashboard', section='delete') }}">Remove Parking Lot</a>
         <a href="{{ url_for('admin_dashboard', section='users') }}">View User Details</a>
+        <a href="{{ url_for('admin_dashboard', section='all') }}">Reservation History</a>
     </div>
     <div class="flash-message">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-                {% set category, message = messages[0] %}
-                <p class="flash {{ category }}">{{ message }}</p>
+                {% for category, message in messages %}
+                    <p class="flash {{ category }}">{{ message }}</p>
+                {% endfor %}
             {% endif %}
         {% endwith %}
-    </div>
+    </div> 
     <div class="main-container">
-            {% if data.section == 'add' %}
+        {% if data.section == 'add' %}
+            <form method="POST">
+                <div class="field">
+                    <input type="text" name="lot_name" required>
+                    <label for="lot_name">Name</label>
+                </div>
+                <div class="field">
+                    <textarea name="address" required></textarea>
+                    <label for="address">Address</label>
+                </div>
+                <br><br>
+                <div class="field">
+                    <input type="text" name="locality" required>
+                    <label for="locality">Locality</label>
+                </div>
+                <div class="field">
+                    <input type="text" name="pincode" required>
+                    <label for="pincode">Pincode</label>
+                </div>
+                <div class="field">
+                    <input type="text" name="base_price" required>
+                    <label for="base_price">Base Price</label>
+                </div>
+                <div class="field">
+                    <input type="text" name="additional_price" required>
+                    <label for="additional_price">Additional Price</label>
+                </div>
+                <div class="field">
+                    <input type="number" name="total_spots" required>
+                    <label for="total_spots">Total No. of Spots</label>
+                </div>
+                <div class="field">
+                    <input type="submit" value="Add">
+                </div>
+            </form>
+        {% elif data.section == 'view' %}
+            {% if not data.parking_lots and not data.parking_lot %}
+                <p>No parking lots found.</p>
+            {% else %}
                 <form method="POST">
                     <div class="field">
-                        <input type="text" name="lot_name" required>
-                        <label for="lot_name">Name</label>
+                        <select name="lot_id" required>
+                            <option value="" disable select>Select Parking Lot to View Details</option>
+                            {% for lot in data.parking_lots %}
+                                <option value="{{ lot.lot_id }}">{{ lot.lot_name }}</option>
+                            {% endfor %}
+                        </select>                        
                     </div>
                     <div class="field">
-                        <textarea name="address" required></textarea>
-                        <label for="address">Address</label>
-                    </div>
-                    <br><br>
-                    <div class="field">
-                        <input type="text" name="locality" required>
-                        <label for="locality">Locality</label>
-                    </div>
-                    <div class="field">
-                        <input type="text" name="pincode" required>
-                        <label for="pincode">Pincode</label>
-                    </div>
-                    <div class="field">
-                        <input type="text" name="base_price" required>
-                        <label for="base_price">Base Price</label>
-                    </div>
-                    <div class="field">
-                        <input type="text" name="additional_price" required>
-                        <label for="additional_price">Additional Price</label>
-                    </div>
-                    <div class="field">
-                        <input type="number" name="total_spots" required>
-                        <label for="total_spots">Total No. of Spots</label>
-                    </div>
-                    <div class="field">
-                        <input type="submit" value="Add">
+                        <input type="submit" value="View">
                     </div>
                 </form>
-            {% elif data.section == 'view' %}
-                {% if not data.parking_lots and not data.parking_lot %}
-                    <p>No parking lots found.</p>
-                {% else %}
-                    <form method="POST">
-                        <div class="field">
-                            <select name="lot_id" required>
-                                <option value="" disable select>Select Parking Lot to View Details</option>
-                                {% for lot in data.parking_lots %}
-                                    <option value="{{ lot.lot_id }}">{{ lot.lot_name }}</option>
-                                {% endfor %}
-                            </select>                        
-                        </div>
-                        <div class="field">
-                            <input type="submit" value="View">
-                        </div>
-                    </form>
-                {% endif %}
-                {% if data.parking_lot %}
-                    {% set lot = data.parking_lot %}
-                    <div class="lot-data">
-                        <table class="lot">
-                            <tr>
-                                <th>Name</th>
-                                <td>{{ lot.lot_name }}</td>
-                            </tr>
-                            <tr>
-                                <th>Address</th>
-                                <td>{{ lot.address }}, {{ lot.locality }}, Chennai - {{ lot.pincode }}</td>
-                            </tr>
-                        </table>
-                        <table class="lot">
-                            <tr>
-                                <th>Base Price</th>
-                                <td>₹ {{ lot.base_price }}</td>
-                            </tr>
-                            <tr>
-                                <th>Additional Price</th>
-                                <td>₹ {{ lot.additional_price }}</td>
-                            </tr>
-                            <tr>
-                        </table>
-                        <table class="lot">
-                                <th>Total No. of Parking Spots</th>
-                                <td>{{ lot.total_spots }}</td>
-                            </tr>
-                            <tr>
-                                <th>No. of Free Spots</th>
-                                <td>{{ lot.free_spots }}</td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="spot-data">                        
-                        <table>
-                        {% set spots = data.parking_spots %}
-                        {% set l = (((lot.total_spots)/10)|round)|int %}
-                        {% for i in range(l) %}
-                            {% set start = i*10 %}
-                            {% set end = (i+1)*10 %}
-                            {% if end > lot.total_spots %}
-                                {% set end = lot.total_spots %}
+            {% endif %}
+            {% if data.parking_lot %}
+                {% set lot = data.parking_lot %}
+                <div class="lot-data">
+                    <table class="lot">
+                        <tr>
+                            <th>Name</th>
+                            <td>{{ lot.lot_name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Address</th>
+                            <td>{{ lot.address }}, {{ lot.locality }}, Chennai - {{ lot.pincode }}</td>
+                        </tr>
+                    </table>
+                    <table class="lot">
+                        <tr>
+                            <th>Base Price</th>
+                            <td>₹{{ lot.base_price }}</td>
+                        </tr>
+                        <tr>
+                            <th>Additional Price</th>
+                            <td>₹{{ lot.additional_price }}</td>
+                        </tr>
+                        <tr>
+                    </table>
+                    <table class="lot">
+                            <th>Total No. of Parking Spots</th>
+                            <td>{{ lot.total_spots }}</td>
+                        </tr>
+                        <tr>
+                            <th>No. of Free Spots</th>
+                            <td>{{ lot.free_spots }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="spot-data">                        
+                    <table>
+                    {% set spots = data.parking_spots %}
+                    {% set l = ((((lot.total_spots)/10)|round)|int) + 1 %}
+                    {% for i in range(l) %}
+                        {% set start = i*10 %}
+                        {% set end = (i+1)*10 %}
+                        {% if end > lot.total_spots %}
+                            {% set end = lot.total_spots %}
+                        {% endif %}
+                        <tr>
+                        {% for j in range(start, end) %}  
+                            {% if spots[j].status == 'A' %}
+                                <td style="background-color: rgb(10, 213, 156);">
+                                    {{ spots[j].spot_id }}
+                                </td>
+                            {% else %}
+                                <td style="background-color: rgb(220, 98, 98);">
+                                    {{ spots[j].spot_id }}
+                                </td>
                             {% endif %}
-                            <tr>
-                            {% for j in range(start, end) %}  
-                                {% if spots[j].status == 'A' %}
-                                    <td style="background-color: rgb(10, 213, 156);">
-                                        {{ spots[j].spot_id }}
-                                    </td>
-                                {% else %}
-                                    <td style="background-color: rgb(220, 98, 98);">
-                                        {{ spots[j].spot_id }}
-                                    </td>
-                                {% endif %}
+                        {% endfor %}
+                        </tr>
+                    {% endfor %}
+                    </table>
+                </div>
+            {% endif %}
+        {% elif data.section == 'update' %}
+            {% if not data.parking_lots and not data.parking_lot %}
+                <p>No parking lots found.</p>
+            {% else %}
+                <form method="POST">
+                    <div class="field">
+                        <select name="lot_id" required>
+                            <option value="" disable select>Select Parking Lot to Update Details</option>
+                            {% for lot in data.parking_lots %}
+                                <option value="{{ lot.lot_id }}">{{ lot.lot_name }}</option>
                             {% endfor %}
+                        </select>                        
+                    </div>
+                    <div class="field">
+                        <select id="parameter" name="parameter" onchange="onChangeUpdateParamater()" required>
+                            <option value="" disable select>Select Update Parameter</option>
+                            <option value="lot_name">Parking Lot Name</option>
+                            <option value="address">Parking Lot Address</option>
+                            <option value="base_price">Base Price</option>
+                            <option value="additional_price">Additional Price</option>
+                            <option value="total_spots">Total No. of Parking Spots</option>
+                        </select>                        
+                    </div>
+                    <div id="update">                            
+                    </div>
+                </form>
+            {% endif %}
+        {% elif data.section == 'delete' %}
+            {% if not data.parking_lots and not data.parking_lot %}
+                <p>No parking lots found.</p>
+            {% else %}
+                <form method="POST">
+                    <div class="field">
+                        <select name="lot_id" required>
+                            <option value="" disable select>Select Parking Lot to Delete</option>
+                            {% for lot in data.parking_lots %}
+                                <option value="{{ lot.lot_id }}">{{ lot.lot_name }}</option>                                    
+                            {% endfor %}
+                        </select>                        
+                    </div>
+                    <div class="field">
+                        <input type="submit" value="Delete">
+                    </div>
+                </form>
+            {% endif %}
+        {% elif data.section == 'users' %}
+            {% if not data.user_details %}
+                <p>No users found.</p>
+            {% else %}
+                <div class="data-table">
+                    <table>
+                        <tr class="header-row">
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Current Reservation(s)</th>
+                        </tr>
+                        {% for current_user in data.user_details %}
+                            {% set user = current_user.user %}
+                            {% set reservations = current_user.reservations %}
+                            <tr>
+                                <td>{{ user.fname }} {{ user.lname }}</td>
+                                <td>{{ user.email }}</td>
+                                {% if reservations %}
+                                    {% set l = reservations|length %}
+                                    {% if l == 1 %}
+                                        <td>{{ reservations[0] }}</td>
+                                    {% else %}
+                                        <td>
+                                        {% for i in range(l-1) %}
+                                            {{ reservations[i] }}<hr>
+                                        {% endfor %}
+                                        {{ reservations[l-1] }}
+                                        </td>
+                                    {% endif %}
+                                {% else %} 
+                                    <td>None</td>
+                                {% endif %}
                             </tr>
                         {% endfor %}
-                        </table>
-                    </div>
-                {% endif %}
-            {% elif data.section == 'update' %}
-                {% if not data.parking_lots and not data.parking_lot %}
-                    <p>No parking lots found.</p>
-                {% else %}
-                    <form method="POST">
-                        <div class="field">
-                            <select name="lot_id" required>
-                                <option value="" disable select>Select Parking Lot to Update Details</option>
-                                {% for lot in data.parking_lots %}
-                                    <option value="{{ lot.lot_id }}">{{ lot.lot_name }}</option>
-                                {% endfor %}
-                            </select>                        
-                        </div>
-                        <div class="field">
-                            <select id="parameter" name="parameter" onchange="onChangeUpdateParamater()" required>
-                                <option value="" disable select>Select Update Parameter</option>
-                                <option value="lot_name">Parking Lot Name</option>
-                                <option value="address">Parking Lot Address</option>
-                                <option value="base_price">Base Price</option>
-                                <option value="additional_price">Additional Price</option>
-                                <option value="total_spots">Total No. of Parking Spots</option>
-                            </select>                        
-                        </div>
-                        <div id="update">                            
-                        </div>
-                    </form>
-                {% endif %}
-            {% elif data.section == 'delete' %}
-                {% if not data.parking_lots and not data.parking_lot %}
-                    <p>No parking lots found.</p>
-                {% else %}
-                    <form method="POST">
-                        <div class="field">
-                            <select name="lot_id" required>
-                                <option value="" disable select>Select Parking Lot to Delete</option>
-                                {% for lot in data.parking_lots %}
-                                    <option value="{{ lot.lot_id }}">{{ lot.lot_name }}</option>                                    
-                                {% endfor %}
-                            </select>                        
-                        </div>
-                        <div class="field">
-                            <input type="submit" value="Delete">
-                        </div>
-                    </form>
-                {% endif %}
-            {% elif data.section == 'users' %}
-                {% if not data.user_details %}
-                    <p>No users found.</p>
-                {% else %}
-                    <div class="user-data">
-                        <table>
-                            <tr class="header-row">
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Current Reservation(s)</th>
+                    </table>
+                </div>
+            {% endif %}
+        {% elif data.section == 'all' %}
+            {% if not data.reservations %}
+                <p>No existing reservations.</p>
+            {% else %}
+                <div class="data-table">
+                    <table class="data-table" style="margin-top: 50px;">
+                        <tr class="header-row">
+                            <th>User ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Spot No.</th>
+                            <th>Parking Lot</th>
+                            <th>Booked Date</th>
+                            <th>Released Date</th>
+                            <th>Total Cost</th>
+                        </tr>
+                        {% for reservation in data.reservations %}
+                            <tr>
+                                <td>{{ reservation.user_id }}</td>
+                                <td>{{ reservation.name }}</td>
+                                <td>{{ reservation.email }}</td>
+                                <td>{{ reservation.spot_no }}</td>
+                                <td>{{ reservation.lot_name }}</td>
+                                <td>{{ reservation.booked_date }}</td>
+                                <td>{{ reservation.released_date }}</td>
+                                <td>{{ reservation.total_cost }}</td>
                             </tr>
-                            {% for current_user in data.user_details %}
-                                {% set user = current_user.user %}
-                                {% set reservations = current_user.reservations %}
-                                <tr>
-                                    <td>{{ user.fname }} {{ user.lname }}</td>
-                                    <td>{{ user.email }}</td>
-                                    {% if reservations %}
-                                        {% set l = reservations|length %}
-                                        {% if l == 1 %}
-                                            <td>reservations[0]</td>
-                                        {% else %}
-                                            <td>
-                                            {% for i in range(l-1) %}
-                                                {{ reservations[i] }}<hr>
-                                            {% endfor %}
-                                            {{ reservations[l-1] }}
-                                            </td>
-                                        {% endif %}
-                                    {% else %} 
-                                        <td>None</td>
-                                    {% endif %}
-                                </tr>
-                            {% endfor %}
-                        </table>
-                    </div>
-                {% endif %}
-            {% endif %}            
-            {% if data.message %}
-                <p>{{ data.message }}</p>
-            {% endif %}       
+                        {% endfor %}
+                    </table>
+                </div>
+            {% endif %}
+        {% endif %}            
+        {% if data.message %}
+            <p>{{ data.message }}</p>
+        {% endif %}       
     </div>
 </body>
 </html>

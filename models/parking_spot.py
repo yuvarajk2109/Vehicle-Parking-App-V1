@@ -9,5 +9,4 @@ class ParkingSpot(db.Model):
 
     lot_id = db.Column(db.Integer, db.ForeignKey('parking_lot.lot_id'), nullable=False)
     
-    reservations = db.relationship('Reservation', backref='spot', lazy=True)
-    
+    reservations = db.relationship('Reservation', backref='spot', lazy=True) 
