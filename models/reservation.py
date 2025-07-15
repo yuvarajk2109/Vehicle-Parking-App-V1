@@ -14,4 +14,4 @@ class Reservation(db.Model):
     total_cost = db.Column(db.Float, nullable=True)
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
-    spot_id = db.Column(db.Integer, db.ForeignKey('parking_spot.spot_id'), nullable=False)   
+    spot_id = db.Column(db.Integer, db.ForeignKey('parking_spot.spot_id',  ondelete='SET NULL'), nullable=True)   
