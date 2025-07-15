@@ -76,6 +76,83 @@ a {
     box-sizing: border-box; 
 }
 
+.main-content {
+    margin-top: 130px; 
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    padding: 40px 20px;
+    background-color: #f4f6fc;
+    border-radius: 12px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+}
+
+.content-heading {
+    margin-left: 20px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.sub-content {
+    margin-top: 10px; 
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    padding: 40px 20px;
+    background-color: #f4f6fc;
+    border-radius: 12px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+}
+
+.content-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.left-section img {
+    width: 210px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 10px;
+}
+
+.right-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 250px;
+    flex: 1;
+}
+
+.right-section p {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 1px;
+}
+
+.info-text {
+    flex-grow: 1;
+}
+
+.info-link {
+    margin-top: auto;
+    padding-top: 10px;
+}
+
+.info-link a {
+    font-weight: 600;
+    color: #4169E1;
+}
+
 .main-container form .field {
     display: flex;
     height: 50px;

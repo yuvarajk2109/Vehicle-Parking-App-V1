@@ -1,7 +1,7 @@
 parking_lots = []
-fetchJSONData();
+fetchLotData();
 
-function onChangeLocality() {    
+function onChangeLocality() {  
     locality = document.getElementById("locality").value;   
     filtered_lots = parking_lots.filter(lot => lot.locality === locality && lot.free_spots > 0);
     available = false;
@@ -24,8 +24,8 @@ function onChangeLocality() {
     
 }
 
-function fetchJSONData() {
-    fetch('/static/json/data.json')
+function fetchLotData() {
+    fetch('/static/json/lot_data.json')
     .then(response => {
         if (!response.ok) {
         throw new Error("Failed to load JSON");

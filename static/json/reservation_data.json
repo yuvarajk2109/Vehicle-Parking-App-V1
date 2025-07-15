@@ -1,0 +1,18 @@
+[
+    {
+        "locality": "Ambattur",
+        "reservation_count": 0
+    },
+    {
+        "locality": "Karayanchavadi",
+        "reservation_count": 1
+    },
+    {
+        "locality": "Porur",
+        "reservation_count": 1
+    },
+    {
+        "locality": "Thirumullaivoyal",
+        "reservation_count": 3
+    }
+]

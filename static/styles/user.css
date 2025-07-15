@@ -49,13 +49,34 @@
     cursor: pointer;
 }
 
+.graph-wrapper {
+    margin-top: 100px;    
+    transition: margin-left 0.3s ease;    
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.main-content {    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    margin-left: 20px;    
+    height: 400px;
+}
+
+body.side-panel-open .graph-wrapper {
+    margin-left: 240px;
+}
+
 .main-container {
     margin-top: 100px;
     margin-left: 0;
     transition: margin-left 0.3s ease;
     padding: 20px;  
     width: 100%;
-    min-height: calc(100vh - 100px);
+    /* min-height: calc(100vh - 100px); */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -64,6 +85,11 @@
 
 body.side-panel-open .main-container {
     margin-left: 220px;
+}
+
+.data-table {
+    overflow-y: auto;
+    max-height: 500px;
 }
 
 .data-table table, .data-table th, .data-table td {
@@ -77,26 +103,88 @@ body.side-panel-open .main-container {
 }
 
 .data-table .header-row {
-    /* border-top: 3px solid grey; */
     background: #b7e0ed;
     background: linear-gradient(90deg, rgba(183, 224, 237, 1) 0%, rgba(155, 204, 179, 1) 100%);
 }
 
 .data-table tr:nth-child(odd) {
     background-color: rgb(203, 234, 243);
-    /* background-color: rgb(196, 194, 194); */
 }
 
 .data-table tr:nth-child(even) {
     background-color: rgb(202, 237, 219);
-    /* background-color: rgb(196, 194, 194); */
 }
 
 .data-table th, .data-table td {    
    padding: 15px;
-   /* border-bottom: 3px solid grey; */
 }
 
 .data-table hr {
     border: 1px solid grey;
+}
+
+.lot-data {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.lot-data table, .lot-data th, .lot-data td {
+    text-align: left;
+    border-collapse: collapse;
+}
+
+.lot-data table {
+    border: 3px solid;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.lot-data th {
+    border-right: 3px solid;
+}
+
+.lot-data th, .lot-data td {    
+   padding: 10px;
+}
+
+.spot-data td {    
+    border-collapse: collapse;
+    border: 2px solid;
+    height: 100px;
+    width: 100px;
+}
+
+.lot-data {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.lot-data table, .lot-data th, .lot-data td {
+    text-align: left;
+    border-collapse: collapse;
+}
+
+.lot-data table {
+    border: 3px solid;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.lot-data th {
+    border-right: 3px solid;
+}
+
+.lot-data th, .lot-data td {    
+   padding: 10px;
+}
+
+.spot-data td {    
+    border-collapse: collapse;
+    border: 2px solid;
+    height: 100px;
+    width: 100px;
 }

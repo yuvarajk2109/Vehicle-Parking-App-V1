@@ -11,8 +11,7 @@
     <div class="header-container">
         <div class="auth-heading">
             <a href="{{ url_for('home') }}">
-                Vehicle Parking Application - V1<br>
-                22f2001731
+                Vehicle Parking Application - V1
             </a>
         </div>
         <div class="links">
@@ -29,5 +28,35 @@
             {% endif %}
         {% endwith %}
     </div>    
+    <div class="main-content">
+        Welcome to the Vehicle Parking Application!
+        <br>
+        Our parking lots are available all around the incredibly city of Chennai!
+        <br> 
+        <b>Register</b> if you haven't already done so, or <b>login</b> to your existing account and start reserving your parking spots!
+    </div>
+    <span class="content-heading">
+        Meet the Creator
+    </span>
+    <div class="sub-content">
+        <div class="content-wrapper">
+            <div class="left-section">
+                <img src="{{ url_for('static', filename='images/Yuvaraj.jpg') }}" alt="Photo of Yuvaraj">
+            </div>
+            <div class="right-section">
+                <div class="info-text">
+                    <p>Yuvaraj K</p>
+                    <p>22f2001731</p>
+                    <br>
+                    <p>--> Passionate programmer, consistent worker, and someone eager to take on new challenges.</p>
+                    <p>--> An avid reader, football fanatic, and general sports lover.</p>
+                    <p>--> Recently read Child on the Doorstep.</p>
+                    <p>--> Recenty watched Superman.</p>
+                </div>
+                <div class="info-link">
+                    <a href="www.linkedin.com/in/yuvarajk21">LinkedIn</a>
+                </div>
+            </div>
+        </div>
 </body>
 </html>

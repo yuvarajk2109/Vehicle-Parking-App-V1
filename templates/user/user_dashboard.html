@@ -6,8 +6,10 @@
     <title>User</title>    
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/user.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{{ url_for('static', filename='js/side_panel.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/filter.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/filter.js') }}"></script>    
+    <script src="{{ url_for('static', filename='js/graph.js') }}"></script>
 </head>
 <body>
     <div class="header-container">        
@@ -48,7 +50,23 @@
             {% endif %}
         {% endwith %}
     </div> 
+   {% if not data.section %}
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                fetchReservationData();
+            });
+        </script>
+        <div class="graph-wrapper">
+            <div class="content-heading">
+                Your Reservation Summary 
+            </div>
+            <div class="main-content">
+                <canvas id="reservation_chart"></canvas>
+            </div>
+        </div>
+    {% endif %}
     <div class="main-container">
+        
         {% if data.section == 'view' %}
             {% if not data.localities and not data.filtered_lots %}
                 <p>No parking lots found.</p>

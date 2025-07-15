@@ -6,9 +6,10 @@
     <title>Admin</title>    
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/user.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/user_admin.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{{ url_for('static', filename='js/side_panel.js') }}"></script>
     <script src="{{ url_for('static', filename='js/update.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/graph.js') }}"></script>
 </head>
 <body>
      <div class="header-container">        
@@ -52,6 +53,21 @@
             {% endif %}
         {% endwith %}
     </div> 
+    {% if not data.section %}
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                fetchReservationData();
+            });
+        </script>
+        <div class="graph-wrapper">
+            <div class="content-heading">
+                Reservation Summary 
+            </div>
+            <div class="main-content">
+                <canvas id="reservation_chart"></canvas>
+            </div>
+        </div>
+    {% endif %}
     <div class="main-container">
         {% if data.section == 'add' %}
             <form method="POST">
@@ -196,7 +212,7 @@
             {% endif %}
         {% elif data.section == 'delete' %}
             {% if not data.parking_lots and not data.parking_lot %}
-                <p>No parking lots found.</p>
+                <p>No parking lots found that can be removed.</p>
             {% else %}
                 <form method="POST">
                     <div class="field">
@@ -251,6 +267,7 @@
                                     {% endif %}
                                 {% else %} 
                                     <td>None</td>
+                                    <td>-</td>
                                 {% endif %}
                             </tr>
                         {% endfor %}
