@@ -1,11 +1,11 @@
 [
     {
         "locality": "Ambattur",
-        "reservation_count": 0
+        "reservation_count": 1
     },
     {
         "locality": "Karayanchavadi",
-        "reservation_count": 1
+        "reservation_count": 4
     },
     {
         "locality": "Porur",

@@ -3,7 +3,7 @@
         "lot_id": 3,
         "lot_name": "SK's Parking",
         "locality": "Thirumullaivoyal",
-        "free_spots": 28
+        "free_spots": 29
     },
     {
         "lot_id": 4,
@@ -15,12 +15,12 @@
         "lot_id": 5,
         "lot_name": "Esa's Parking",
         "locality": "Karayanchavadi",
-        "free_spots": 15
+        "free_spots": 12
     },
     {
         "lot_id": 6,
         "lot_name": "Arc's Parking",
         "locality": "Porur",
-        "free_spots": 29
+        "free_spots": 30
     }
 ]
