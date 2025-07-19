@@ -2,7 +2,6 @@ from flask import render_template, request, session, redirect, url_for, flash
 from models import db, ParkingLot, ParkingSpot, Reservation
 from controllers.user_admin_utils import load_user, get_reservations, write_json_reservation_data
 from controllers.user_utils import *
-from sqlalchemy import distinct
 
 def user_dashboard_route(app):
     @app.route('/user_dashboard', methods=['GET','POST'])
@@ -71,25 +70,3 @@ def user_dashboard_route(app):
                 return redirect(url_for('user_dashboard', section=None))
 
         return render_template('user/user_dashboard.html', data=data)
-    
-def get_distinct_localities():
-        localities = db.session.query(distinct(ParkingLot.locality)).all()
-        localities = [loc[0] for loc in localities]
-        localities.sort()
-        return localities
-
-def get_current_reserved_lots(user):
-    return (
-        db.session.query(
-            ParkingLot.lot_name,  
-            ParkingLot.locality,    
-            ParkingSpot.spot_id
-        )
-        .join(ParkingSpot, ParkingLot.lot_id == ParkingSpot.lot_id)
-        .join(Reservation, ParkingSpot.spot_id == Reservation.spot_id)
-        .filter(
-            Reservation.user_id == user['user_id'],
-            Reservation.end_time == None
-        )
-        .all()
-    )

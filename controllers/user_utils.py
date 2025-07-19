@@ -3,6 +3,29 @@ from models import db, ParkingLot, ParkingSpot, Reservation
 from controllers.user_admin_utils import compute_duration_hours 
 import os, json
 from datetime import datetime
+from sqlalchemy import distinct
+
+def get_distinct_localities():
+        localities = db.session.query(distinct(ParkingLot.locality)).all()
+        localities = [loc[0] for loc in localities]
+        localities.sort()
+        return localities
+
+def get_current_reserved_lots(user):
+    return (
+        db.session.query(
+            ParkingLot.lot_name,  
+            ParkingLot.locality,    
+            ParkingSpot.spot_id
+        )
+        .join(ParkingSpot, ParkingLot.lot_id == ParkingSpot.lot_id)
+        .join(Reservation, ParkingSpot.spot_id == Reservation.spot_id)
+        .filter(
+            Reservation.user_id == user['user_id'],
+            Reservation.end_time == None
+        )
+        .all()
+    )
 
 def format_reserved_lots(reservation_tuple):
     reservations = []
