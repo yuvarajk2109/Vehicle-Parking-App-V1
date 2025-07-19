@@ -1,6 +1,7 @@
 from flask import request
 from models import db, User, ParkingLot, ParkingSpot, Reservation
 from controllers.user_admin_utils import compute_duration_hours, get_reservations 
+from sqlalchemy import desc
 
 def get_all_parking_lots():
     return ParkingLot.query.all()
@@ -51,6 +52,7 @@ def get_all_reservations():
         .join(ParkingSpot, ParkingLot.lot_id == ParkingSpot.lot_id)
         .join(Reservation, ParkingSpot.spot_id == Reservation.spot_id)
         .join(User, Reservation.user_id == User.user_id)
+        .order_by(desc(Reservation.start_date), desc(Reservation.start_time))
         .all()
     )
 
