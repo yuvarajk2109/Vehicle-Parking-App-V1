@@ -9,13 +9,13 @@
         "lot_id": 4,
         "lot_name": "Yuvaraj Parking",
         "locality": "Ambattur",
-        "free_spots": 29
+        "free_spots": 28
     },
     {
         "lot_id": 5,
         "lot_name": "Esa's Parking",
         "locality": "Karayanchavadi",
-        "free_spots": 12
+        "free_spots": 13
     },
     {
         "lot_id": 6,

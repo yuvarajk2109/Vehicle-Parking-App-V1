@@ -2,7 +2,6 @@ from flask import request, render_template, session, redirect, url_for, flash
 from models import db, User
 from controllers.auth_utils import *
 
-from flask import render_template
 
 def home_route(app):
     @app.route('/', methods=['GET'])
